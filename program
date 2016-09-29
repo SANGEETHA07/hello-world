@@ -1,0 +1,106 @@
+import java.util.Arrays ;
+public class puzzle {
+public static void main(String args[])
+{
+int maj, min;
+// input here
+maj = 8;
+min = 4;
+// validation
+if (maj%2 == 1 || min%2 == 1)
+{
+System.out.println("Inputs are not even");
+return;
+}
+if (min > maj/2)
+{
+System.out.println("Second # is not less than or equal to half of the
+first");
+return;
+}
+// Creating an array for just identifying the tables 1=boundary 2 = no
+boundary
+// each array variable represent a block of four boxes
+char[][] table = new char [maj/2][maj/2];
+// Lets start as all cells required boundaries
+for(int i=0; i<maj/2; ++i)
+for(int j=0; j<maj/2; ++j)
+table[i][j] = '1';
+//debug code can be commented
+/*for(int i=0; i<maj/2;++i)
+System.out.println(new String(table[i]));*/
+for(int i=0; i<min; ++i)
+table[i][i] = '0';
+//debug code can be commented
+/* for(int i=0; i<maj/2;++i)
+System.out.println(new String(table[i])); */
+// declare tablefulld & intialize
+char[][] tablefulld = new char [maj][maj];
+for(int i=0; i<maj; ++i)
+for(int j=0; j<maj; ++j)
+tablefulld[i][j] = '1';
+// Look at table and set tablefulld to expand the dimensions 
+for(int i=0; i<maj/2; ++i)
+for(int j=0; j<maj/2; ++j)
+if(table[i][j] == '0')
+{
+tablefulld[i*2][j*2] = 0;
+tablefulld[i*2][j*2+1] = 0;
+tablefulld[i*2 + 1 ][j*2] = 0;
+tablefulld[i*2 + 1 ][j*2 + 1 ] = 0;
+}
+//debug code can be commented
+/* for(int i=0; i<maj;++i)
+System.out.println(new String(tablefulld[i])); */
+// defining an array to capture table boundary
+char[][] tablebound = new char [maj*2+1][maj*2+1];
+/* How am i setting the boundaries
+Created a boundary array that would hold '_' & '|'
+The array indices will be set to 2*maj + 1 as we need two rows to define
+a cell and a final last row
+on X axis
+- Odd numbers represent Vertical boundaries ('|') and even numbers
+represent horizontal boundaries ('_')
+on Y axis,
+ - Odd numbers represent horizontal boundaries ('_') and even numbers
+represent vertical boundaries ('|')
+The array will have all blanks when it starts and the below code will set
+boundaries only as follows
+ - tablebound [Even][Odd] = '_'
+ - tablebound [Odd][Even] = '|'
+*/
+// set outer boundaries
+//Top row boundary
+for(int j=0; j<maj*2; ++j)
+if(j%2==1)
+tablebound[0][j] = '_';
+//Bottom row boundary
+for(int j=0; j<maj*2; ++j)
+if(j%2==1)
+tablebound[maj*2][j] = '_';
+//First col boundary
+for(int i=0; i<maj*2;++i)
+if(i%2==1)
+tablebound[i][0] = '|';
+//Last col boundary
+for(int i=0; i<maj*2;++i)
+if(i%2==1)
+tablebound[i][maj*2] = '|';
+// Set inner cell boundaries based on table array created earlier
+for(int i=0; i<maj; ++i)
+for(int j=0; j<maj; ++j)
+if(tablefulld[i][j] == '1') 
+{
+tablebound[i*2+1][j*2] = '|';
+tablebound[i*2+1][j*2+2] = '|';
+tablebound[i*2][j*2+1] = '_';
+tablebound[i*2+2][j*2+1] = '_';
+}
+// Print inputs
+System.out.println("First input:" + maj + " Sec input:" + min);
+//Print boundarties
+for(int i=0; i<maj*2+1;++i)
+System.out.println(new String(tablebound[i]));
+}
+
+}
